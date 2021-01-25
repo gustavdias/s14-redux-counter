@@ -1,4 +1,10 @@
 # Getting Started with Create React App
+In this project there is: 
+1. A stand alone redux-basics.js, that you can initialize with node.
+2. A integration of redux with react, where:
+a) STORE is initialized in index.js;
+b) REDUCER is created in a different file: scr/store/reducer.js
+3. Subscription in the counter container.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
