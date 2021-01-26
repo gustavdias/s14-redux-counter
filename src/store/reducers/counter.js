@@ -1,11 +1,20 @@
+//!the reducer was splitted (into counter.js & result.js) and is no longer in use.
+//using multiple reducers - split it up by feature and them redux will combine all in one reducer
+//one for counter and one for results.
+
+//? it is a good practice to outsource your action types into constants you can use in your application so that you always just import a constant and eliminate the danger of mistyping,
+import * as actionTypes from "../actions"; // actionTypes is an object which has all the const as properties from actions
+
 const initialState = {
   counter: 0,
+
+  //the initial state doesn't need to know about results
   results: [], //updating state immutably
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case "INCREMENT":
+    case actionTypes.INCREMENT:
       //since there is return, you don't need to use break
       //   return {
       //! counter: state.counter + 1, //since know the state is a object with a number and an array, I can't use this
@@ -17,7 +26,9 @@ const reducer = (state = initialState, action) => {
       newState.counter = state.counter + 1;
       return newState;
     // };
-    case "DECREMENT":
+
+    //actionTypes.DECREMENT - variables instead of strings, if we mistype one constant name, we'll actually get an error by our IDE or by that build process
+    case actionTypes.DECREMENT: //case "DECREMENT":
       //   return {
       //     counter: state.counter - 1,
       //   };
@@ -37,7 +48,7 @@ const reducer = (state = initialState, action) => {
         counter: state.counter + action.payload,
       };
 
-    case "SUBTRACT":
+    case actionTypes.SUBTRACT:
       //   return {
       //     counter: state.counter - action.payload,
       //   };
@@ -46,36 +57,38 @@ const reducer = (state = initialState, action) => {
         ...state,
         counter: state.counter - action.payload,
       };
-    case "STORE_RESULT":
-      return {
-        ...state,
-        //return a javascript object where we distribute the old state thus keeping the counter but then we set results here:
-        results: state.results.concat({ id: new Date(), value: state.counter }), //concat is like push, but creates a new array
-      };
-    case "DELETE_RESULT":
-      //   const id = 2;
-      //   state.results.splice(id, 1); //! This mutates the original array
 
-      //! Volta -  1st way to update Arrays Immutably - Coping the array
-      //   const id = 2;
-      //   const updatedArray = [...state.results];
-      //--------
-      //! Volta - if the elements in state.results were objects as they actually are, the objects themselves are still pointing to the same objects they did before.
-      //? if you change a property in one of the elements themselves, just creating a new array like this isn't enough, if you just plan on removing an object though, that is okay
-      //   updatedArray.splice(id, 1);
+    //! This goes to result.js Reducer  
+    // case actionTypes.STORE_RESULT:
+    //   return {
+    //     ...state,
+    //     //return a javascript object where we distribute the old state thus keeping the counter but then we set results here:
+    //     results: state.results.concat({ id: new Date(), value: state.counter }), //concat is like push, but creates a new array
+    //   };
+    // case actionTypes.DELETE_RESULT:
+    //   //   const id = 2;
+    //   //   state.results.splice(id, 1); //! This mutates the original array
 
-      //--------
-      //! Volta - 2nd way to update Arrays Immutably - filter method - originalArray.filter() - filter returns a new array
-      //. Filter takes a function as an input, the function is executed on each element in the array, it determines whether this element fulfils a certain condition to make it into the new array
+    //   //! Volta -  1st way to update Arrays Immutably - Coping the array
+    //   //   const id = 2;
+    //   //   const updatedArray = [...state.results];
+    //   //--------
+    //   //! Volta - if the elements in state.results were objects as they actually are, the objects themselves are still pointing to the same objects they did before.
+    //   //? if you change a property in one of the elements themselves, just creating a new array like this isn't enough, if you just plan on removing an object though, that is okay
+    //   //   updatedArray.splice(id, 1);
 
-      const updatedArray = state.results.filter(
-        (result) => result.id !== action.resultElId
-      );
+    //   //--------
+    //   //! Volta - 2nd way to update Arrays Immutably - filter method - originalArray.filter() - filter returns a new array
+    //   //. Filter takes a function as an input, the function is executed on each element in the array, it determines whether this element fulfils a certain condition to make it into the new array
 
-      return {
-        ...state,
-        results: updatedArray,
-      };
+    //   const updatedArray = state.results.filter(
+    //     (result) => result.id !== action.resultElId
+    //   );
+
+    //   return {
+    //     ...state,
+    //     results: updatedArray,
+    //   };
     //* So we get the individual element as an input here, the element or in our case, the result
     // state.result.filter(result => true); //? if you return true, you return this for every element and therefore, you just created a copy of the old array,
     //* return true for every element which doesn't have a certain ID

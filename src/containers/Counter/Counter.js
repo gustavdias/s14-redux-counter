@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import CounterControl from "../../components/CounterControl/CounterControl";
 import CounterOutput from "../../components/CounterOutput/CounterOutput";
+import * as actionTypes from "../../store/actions";
 
 //!Connecting the Store to React - use react-redux to create the subscription
 import { connect } from "react-redux";
@@ -82,6 +83,11 @@ class Counter extends Component {
           Store Result
         </button>
         <ul>
+          {/* //! error: TypeError: Cannot read property 'map' of undefined 
+          //*After combining all the reducers into one rootReducer in index.js, strResult becomes undefined, instead of referring to an array of results
+          //to avoid naming conflicts, redux adds one level of nesting where it has one state object with the key ctr and res from index.js
+          //this keys gives access to the subState.
+          //? To access counter.js: state.ctr.counter */}
           {/* //! Updating State Immutably */}
           {this.props.storedResults.map((strResult) => (
             <li
@@ -115,9 +121,11 @@ const mapStateToProps = (state) => {
   //function which expects the state stored in redux as the input and returns a javascript object which is a map of prop names and slices of the state stored in redux.
   return {
     //ctr for counter
-    ctr: state.counter, //give me the value of the counter in our global state managed by redux
+    ctr: state.ctr.counter, //? To access counter.js: state.ctr.counter
+    // * ctr: state.counter, //give me the value of the counter in our global state managed by redux
     // ! Updating State Immutably
-    storedResults: state.results,
+    storedResults: state.res.results,
+    // storedResults: state.results,
   };
 };
 //this function will eventually be executed by the react-redux package because we will pass it to it,
@@ -127,22 +135,25 @@ const mapStateToProps = (state) => {
 // equivalent to store.dispatch() on redux stand alone
 const mapDispatchToProps = (dispatch) => {
   return {
-    onIncrementCounter: () => dispatch({ type: "INCREMENT" }),
+    //? change action types
+    onIncrementCounter: () => dispatch({ type: actionTypes.INCREMENT }), //{ type: "INCREMENT" }),
     //return a javascript object where we can define some prop names which will hold a reference to a function which should eventually get executed to dispatch an action.
     //onIncrementCounter - this property now holds a value of course and that value should be an anonymous function
     //*this function dispatch() will be available through this property onIncrementCounter, and therefore, whenever this property is executed as a function, the dispatch method wil be executed.
     //dispatch({ type: "INCREMENT" }), You pass a JS Object where you need to set up a type/
 
-    onDecrementCounter: () => dispatch({ type: "DECREMENT" }),
+    onDecrementCounter: () => dispatch({ type: actionTypes.DECREMENT }),
     //! Passing and Retrieving Data with Action
-    onAddCounter: () => dispatch({ type: "ADD", payload: 10 }),
-    onSubtractCounter: () => dispatch({ type: "SUBTRACT", payload: 5 }),
+    onAddCounter: () => dispatch({ type: actionTypes.ADD, payload: 10 }),
+    onSubtractCounter: () =>
+      dispatch({ type: actionTypes.SUBTRACT, payload: 5 }),
 
     //! Updating State Immutably
     // if I click one of these results, so one of these list items, I want to remove it from the array,
     onStoreResult: (result) =>
-      dispatch({ type: "STORE_RESULT", result: result }),
-    onDeleteResult: (id) => dispatch({ type: "DELETE_RESULT", resultElId: id }),
+      dispatch({ type: actionTypes.STORE_RESULT, result: result }),//passing a action to result.js reducer
+    onDeleteResult: (id) =>
+      dispatch({ type: actionTypes.DELETE_RESULT, resultElId: id }),
   };
 };
 
