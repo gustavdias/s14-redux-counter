@@ -25,3 +25,5 @@ export const subtract = ( value ) => {
         val: value
     };
 };
+
+//?using Using Utility Functions to clean up reducers
