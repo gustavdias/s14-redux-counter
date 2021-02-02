@@ -7,8 +7,10 @@ const reducer = (state = initialState, action) => {
     case actionTypes.ADD_PERSON:
       const newPerson = {
         id: Math.random(), // not really unique but good enough here!
-        name: "Max",
-        age: Math.floor(Math.random() * 40),
+        // name: "Max",
+        name: action.personData.name,
+        // age: Math.floor(Math.random() * 40),
+        age: action.personData.age,
       };
 
       //transform this...
@@ -21,18 +23,20 @@ const reducer = (state = initialState, action) => {
         persons: state.persons.concat(newPerson),
       };
     case actionTypes.REMOVE_PERSON:
-            //transform this...
+      //transform this...
 
       // this.setState((prevState) => {
       //   return {
       //     persons: prevState.persons.filter((person) => person.id !== personId),
       //   };
       // });
-            //into this:
+      //into this:
 
       return {
         ...state,
-        persons: state.persons.filter((person) => person.id !== action.personId),
+        persons: state.persons.filter(
+          (person) => person.id !== action.personId
+        ),
       };
     default:
       return state;
