@@ -46,7 +46,7 @@ const logger = (store) => {
 //Advanced store setup
 //a variable which is injected by the Chrome extension into our javascript at runtime, so it will be available
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-//?compose is a little bit similar to combineReducers - combineReducer for Reducers and compose enhancers
+//?compose is a little bit similar to combineReducers - combineReducer for Reducers and compose for enhancers
 //applyMiddleware is only for middlewares if we have other enhancers like the store dev tools, we need to use compose to compose a set of enhancers with both the dev tools features and our middleware.
 // /native redux solution which of course doesn't give us dev tools support then.
 //!--------------
