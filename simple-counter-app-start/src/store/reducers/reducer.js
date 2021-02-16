@@ -5,6 +5,7 @@ import * as actionTypes from "../actions/actionTypes"
 //? The reducer tells Redux what the initial state of the store is
 const initialState = {
     count: 0,
+    test: "testing"
   };
   //? Reducer - receives 2 arguments: state and action
   //* every time something happens, redux calls this reducer
